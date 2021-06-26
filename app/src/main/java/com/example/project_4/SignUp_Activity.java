@@ -42,7 +42,7 @@ public class SignUp_Activity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
-                                    User user = new User(signup_username.getText().toString(), signup_password.getText().toString());
+                                    User user = new User(signup_username.getText().toString(), signup_email.getText().toString());
                                     FirebaseDatabase.getInstance().getReference("Users")
                                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                             .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
