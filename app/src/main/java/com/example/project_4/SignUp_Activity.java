@@ -17,9 +17,11 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUp_Activity extends AppCompatActivity {
 
-    private TextView signup_username, signup_password, signup_password2, signup_email;
-    Button signup_button;
+    private TextView EDIT_TEXT_signup_username, EDIT_TEXT_signup_password, EDIT_TEXT_signup_password2,
+            EDIT_TEXT_signup_email;
+    Button EDIT_TEXT_signup_button;
     private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,21 +30,21 @@ public class SignUp_Activity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        signup_username = findViewById(R.id.signup_username);
-        signup_password = findViewById(R.id.signup_password);
-        signup_password2 = findViewById(R.id.signup_password2);
-        signup_email = findViewById(R.id.signup_email);
-        signup_button = findViewById(R.id.signup_complete);
+        EDIT_TEXT_signup_username = findViewById(R.id.signup_username);
+        EDIT_TEXT_signup_password = findViewById(R.id.signup_password);
+        EDIT_TEXT_signup_password2 = findViewById(R.id.signup_password2);
+        EDIT_TEXT_signup_email = findViewById(R.id.signup_email);
+        EDIT_TEXT_signup_button = findViewById(R.id.signup_complete);
 
-        signup_button.setOnClickListener(new View.OnClickListener(){
+        EDIT_TEXT_signup_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                mAuth.createUserWithEmailAndPassword(signup_email.getText().toString(), signup_password.getText().toString())
+                mAuth.createUserWithEmailAndPassword(EDIT_TEXT_signup_email.getText().toString(), EDIT_TEXT_signup_password.getText().toString())
                         .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
-                                    User user = new User(signup_username.getText().toString(), signup_email.getText().toString());
+                                    User user = new User(EDIT_TEXT_signup_username.getText().toString(), EDIT_TEXT_signup_email.getText().toString());
                                     FirebaseDatabase.getInstance().getReference("Users")
                                             .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                             .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -50,6 +52,7 @@ public class SignUp_Activity extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Void> task) {
                                             if(task.isSuccessful()){
                                                 Toast.makeText(SignUp_Activity.this, "User has been registered Successfully", Toast.LENGTH_LONG).show();
+                                                finish();
                                             }
                                             else{
                                                 Toast.makeText(SignUp_Activity.this, "Failed to register", Toast.LENGTH_LONG).show();
