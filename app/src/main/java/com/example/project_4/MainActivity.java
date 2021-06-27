@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
                     if(email.equals("professor@gmail.com")){
-                        Toast.makeText(MainActivity.this, "Professor Email!", Toast.LENGTH_LONG).show();
+                        startActivity(new Intent(MainActivity.this, ProfessorLogin_Activity.class));
                     }
                     else{
                         startActivity(new Intent(MainActivity.this, StudentLogin_Activity.class));
