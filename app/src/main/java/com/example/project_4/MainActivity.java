@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 userLogin();
             }
         });
@@ -93,7 +94,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    startActivity(new Intent(MainActivity.this, StudentLogin_Activity.class));
+                    if(email.equals("professor@gmail.com")){
+                        Toast.makeText(MainActivity.this, "Professor Email!", Toast.LENGTH_LONG).show();
+                    }
+                    else{
+                        startActivity(new Intent(MainActivity.this, StudentLogin_Activity.class));
+                    }
                 }
                 else{
                     Toast.makeText(MainActivity.this, "Failed to login! Please check your credentials", Toast.LENGTH_LONG).show();

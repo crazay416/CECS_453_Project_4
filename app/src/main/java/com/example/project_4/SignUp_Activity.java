@@ -92,6 +92,11 @@ public class SignUp_Activity extends AppCompatActivity {
         System.out.println("signup password: " + signup_password);
         System.out.println("signup password2: " + signup_password2);
 
+        if(signup_password.length() < 5){
+            Toast.makeText(getApplicationContext(), "Password is too short", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
         if (!signup_password.equals(signup_password2)) {
             Toast.makeText(getApplicationContext(), "Passwords do not match", Toast.LENGTH_LONG).show();
             return false;
