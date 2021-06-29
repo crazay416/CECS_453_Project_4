@@ -137,12 +137,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful()){
-                    getUserID(email);
                     if(email.equals("professor@gmail.com")){
                         startActivity(new Intent(MainActivity.this, ProfessorLogin_Activity.class));
+                        //getUserID(email);
                     }
                     else{
-                        getUserID(email);
+                        //getUserID(email);
                         startActivity(new Intent(MainActivity.this, StudentLogin_Activity.class));
                     }
                 }
@@ -154,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /*
     public void getUserID(String email){
         DatabaseReference reference;
         reference = FirebaseDatabase.getInstance().getReference();
@@ -165,7 +166,11 @@ public class MainActivity extends AppCompatActivity {
                         for(DataSnapshot childSnapshot: snapshot.getChildren()){
                             String logincredentials = childSnapshot.getKey();
                             System.out.println("Email: " + logincredentials);
+                            Intent intent = new Intent(MainActivity.this, ProfessorLogin_Activity.class);
+                            intent.putExtra("credentials", logincredentials);
+                            startActivity(intent);
                         }
+
 
                     }
 
@@ -175,5 +180,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+     */
 
 }
