@@ -26,12 +26,17 @@ public class ProfessorLogin_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_professor_login);
+        getCurrentUser();
 
+    }
+
+
+    public void getCurrentUser(){
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("Users");
         userID = user.getUid();
 
-        final TextView email_TEXTVIEW = findViewById(R.id.professor_username_id);
+        final TextView email_TEXTVIEW = findViewById(R.id.professor_email_id);
         final TextView username_TEXTVIEW = findViewById(R.id.professor_username_id);
 
         reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -53,9 +58,5 @@ public class ProfessorLogin_Activity extends AppCompatActivity {
                 Toast.makeText(ProfessorLogin_Activity.this, "Somethign went wrong!", Toast.LENGTH_SHORT).show();
             }
         });
-
-
-
-
     }
 }

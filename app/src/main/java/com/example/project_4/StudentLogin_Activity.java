@@ -28,7 +28,13 @@ public class StudentLogin_Activity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_login);
+        getCurrentUser();
 
+
+
+    }
+
+    public void getCurrentUser(){
         user = FirebaseAuth.getInstance().getCurrentUser();
         reference = FirebaseDatabase.getInstance().getReference("Users");
         userID = user.getUid();
@@ -55,6 +61,6 @@ public class StudentLogin_Activity extends AppCompatActivity {
                 Toast.makeText(StudentLogin_Activity.this, "Somethign went wrong!", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
+
 }
