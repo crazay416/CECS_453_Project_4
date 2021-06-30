@@ -51,43 +51,6 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
 
 
-        /*
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot childSnapshot : snapshot.getChildren()){
-                    String parent = childSnapshot.getKey();
-                    System.out.println(parent);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-         */
-
-        /*
-        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("Users");
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                System.out.println("LIST");
-                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
-                    System.out.println(dataSnapshot.getValue().toString());
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-        */
-
-
-
 
         sign_up.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,33 +116,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-    /*
-    public void getUserID(String email){
-        DatabaseReference reference;
-        reference = FirebaseDatabase.getInstance().getReference();
-
-        reference.child("Users").orderByChild("email").equalTo(email)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for(DataSnapshot childSnapshot: snapshot.getChildren()){
-                            String logincredentials = childSnapshot.getKey();
-                            System.out.println("Email: " + logincredentials);
-                            Intent intent = new Intent(MainActivity.this, ProfessorLogin_Activity.class);
-                            intent.putExtra("credentials", logincredentials);
-                            startActivity(intent);
-                        }
-
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-    }
-     */
 
 }
