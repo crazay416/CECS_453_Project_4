@@ -7,7 +7,7 @@
     tools:context=".QuizSettings_Activity">
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/Quiz_Activity_Name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Activity Quiz"
@@ -17,5 +17,43 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
+        app:layout_constraintVertical_bias="0.068" />
+
+    <ListView
+        android:id="@+id/list"
+        android:layout_width="352dp"
+        android:layout_height="503dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.929" />
+
+    <EditText
+        android:id="@+id/number_of_questions"
+        android:layout_width="125dp"
+        android:layout_height="45dp"
+        android:ems="10"
+        android:hint="# of questions"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.048"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.153" />
+
+    <Button
+        android:id="@+id/generate_questions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="generate"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.534"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.15" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
