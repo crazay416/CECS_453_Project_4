@@ -27,36 +27,50 @@ public class QuizSettings_Activity extends AppCompatActivity {
     private FirebaseUser user;
     private DatabaseReference reference;
     private String userID;
+    Quiz quiz;
 
-    private EditText question_numbers;
+    private EditText subject;
     private String getQuestionsString;
     private int getQuestions;
     Button generate;
+    //ArrayList<>
 
     ArrayList questions;
+    EditText EDIT_TEXT_question_numbers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_settings);
         getCurrentUser();
-
-
-       /*
-        question_numbers = findViewById(R.id.number_of_questions);
-        generate = findViewById(R.id.generate_questions);
+        subject = findViewById(R.id.subject);
+        generate = findViewById(R.id.submit);
         generate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getQuestionsString = question_numbers.getText().toString();
+                String subjectSubmit = subject.getText().toString();
+                subject.setText(subjectSubmit);
+                subject.setEnabled(false);
+            }
+        });
+
+
+
+
+        EDIT_TEXT_question_numbers = findViewById(R.id.question_numbers_id);
+        generate = findViewById(R.id.submit);
+        generate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getQuestionsString = EDIT_TEXT_question_numbers.getText().toString();
                 getQuestions =  Integer.parseInt(getQuestionsString);
                 System.out.println("Number of questions: " + getQuestions);
                 questions = new ArrayList(getQuestions);
-                ListAdapter adapter = SimpleAdapter(QuizSettings_Activity.this, questions,
-                        R.layout.quiz_question, )
+               // ListAdapter adapter = SimpleAdapter(QuizSettings_Activity.this, questions,
+                //        R.layout.quiz_question, quiz.questionList)
             }
         });
-        */
+
 
     }
 

@@ -14,6 +14,12 @@ public class Question {
 
     }
 
+    public Question(String question, ArrayList<String>answerChoices, int correctAnswer){
+        this.question = question;
+        this.answerChoices = answerChoices;
+        this.correctAnswer = correctAnswer;
+    }
+
     public Question(String question){
         this.question = question;
     }
