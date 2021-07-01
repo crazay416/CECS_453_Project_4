@@ -15,6 +15,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -33,6 +35,7 @@ public class AssignStudent_Activity extends AppCompatActivity {
     private DatabaseReference reference2;
     private DatabaseReference reference3;
     private DatabaseReference reference4;
+    private DatabaseReference reference5;
     private String userID;
     private ArrayList<String> all_users = new ArrayList<>();
     private Spinner user_spinner;
@@ -93,7 +96,7 @@ public class AssignStudent_Activity extends AppCompatActivity {
                 reference3.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        collectQuizInfo((Map<String, Object>) snapshot.getValue(), getQuiz);
+                        collectQuizInfo((Map<String, Object>) snapshot.getValue(), getQuiz, getName);
                     }
 
                     @Override
@@ -106,8 +109,7 @@ public class AssignStudent_Activity extends AppCompatActivity {
         });
     }
 
-    public void collectQuizInfo(Map<String, Object> quizInfo, String topic){
-        ArrayList<String> topics = new ArrayList<>();
+    public void collectQuizInfo(Map<String, Object> quizInfo, String topic, String username){
         Object questionArrayList;
         for(Map.Entry<String, Object> entry: quizInfo.entrySet()){
             Map singleUser = (Map) entry.getValue();
@@ -116,19 +118,50 @@ public class AssignStudent_Activity extends AppCompatActivity {
                 questionArrayList = singleUser.get("questionList");
                 String timeLimitString = singleUser.get("timeLimit").toString();
                 int timeLimit = Integer.parseInt(timeLimitString);
-                assignQuiz(topic, subject, timeLimit, questionArrayList);
+                assignQuiz(topic, subject, timeLimit, questionArrayList, username);
             }
         }
-
     }
 
 
-    public void assignQuiz(String topic, String subject, int time, Object questionList){
+    public void assignQuiz(String topic, String subject, int time, Object questionList, String username){
         System.out.println("assignQuiz");
         System.out.println("This is topic: " + topic);
         System.out.println("This is time: " + time);
         System.out.println("This is questionList" + questionList.toString());
+        reference4 = FirebaseDatabase.getInstance().getReference().child("Users");
+        reference4.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                System.out.println("THIS IS ALL USERS KEYS");
+                for(DataSnapshot childsnaphot: snapshot.getChildren()) {
+                    String parent = childsnaphot.getKey();
+                    String children = childsnaphot.getValue().toString();
+                    if (children.contains(username)){
+                        StudentQuiz studentQuiz = new StudentQuiz(topic, subject, time, questionList, false);
+                        FirebaseDatabase.getInstance().getReference("Users").child(parent)
+                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push()
+                                .setValue(studentQuiz).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(getApplicationContext(), "Assigned Quiz!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Quiz was not assigned!", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+                    }
+                }
 
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void collectQuizzes(Map<String, Object> Users){
