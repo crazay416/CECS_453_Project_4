@@ -31,6 +31,8 @@ public class AssignStudent_Activity extends AppCompatActivity {
     private FirebaseUser user;
     private DatabaseReference reference;
     private DatabaseReference reference2;
+    private DatabaseReference reference3;
+    private DatabaseReference reference4;
     private String userID;
     private ArrayList<String> all_users = new ArrayList<>();
     private Spinner user_spinner;
@@ -87,14 +89,47 @@ public class AssignStudent_Activity extends AppCompatActivity {
                 String getQuiz = setquiz_view.getText().toString();
                 String getName = setusername_view.getText().toString();
                 Toast.makeText(getApplicationContext(), "Quiz: " + getQuiz + "| User: " + getName, Toast.LENGTH_LONG).show();
-                Assigned_Quiz assign_student_quiz = new Assigned_Quiz(getQuiz, getName);
-                assign_student_quiz.giveQuiz();
+                reference3 = FirebaseDatabase.getInstance().getReference().child("Quizzes").child("NFz6WjdN1AcLERH06IK8sZ1VguC2");
+                reference3.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        collectQuizInfo((Map<String, Object>) snapshot.getValue(), getQuiz);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
             }
         });
     }
 
+    public void collectQuizInfo(Map<String, Object> quizInfo, String topic){
+        ArrayList<String> topics = new ArrayList<>();
+        Object questionArrayList;
+        for(Map.Entry<String, Object> entry: quizInfo.entrySet()){
+            Map singleUser = (Map) entry.getValue();
+            if(singleUser.get("topic").equals(topic)){
+                String subject = singleUser.get("subject").toString();
+                questionArrayList = singleUser.get("questionList");
+                String timeLimitString = singleUser.get("timeLimit").toString();
+                int timeLimit = Integer.parseInt(timeLimitString);
+                assignQuiz(topic, subject, timeLimit, questionArrayList);
+            }
+        }
+
+    }
 
 
+    public void assignQuiz(String topic, String subject, int time, Object questionList){
+        System.out.println("assignQuiz");
+        System.out.println("This is topic: " + topic);
+        System.out.println("This is time: " + time);
+        System.out.println("This is questionList" + questionList.toString());
+
+    }
 
     public void collectQuizzes(Map<String, Object> Users){
         ArrayList<String> topics = new ArrayList<>();
@@ -199,6 +234,7 @@ public class AssignStudent_Activity extends AppCompatActivity {
                     String username = userProfile.username;
                     String email = userProfile.email;
                     System.out.println("username: " + username + "| email: " + email);
+
 
 
 
