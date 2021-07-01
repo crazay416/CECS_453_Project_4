@@ -139,7 +139,7 @@ public class AssignStudent_Activity extends AppCompatActivity {
                     String children = childsnaphot.getValue().toString();
                     if (children.contains(username)){
                         StudentQuiz studentQuiz = new StudentQuiz(topic, subject, time, questionList, false);
-                        FirebaseDatabase.getInstance().getReference("Users").child(parent)
+                        FirebaseDatabase.getInstance().getReference("Users").child(parent).child("Assigned Quizzes")
                                 .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push()
                                 .setValue(studentQuiz).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
