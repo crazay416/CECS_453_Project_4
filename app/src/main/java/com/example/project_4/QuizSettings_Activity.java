@@ -3,13 +3,18 @@ package com.example.project_4;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -25,7 +30,7 @@ public class QuizSettings_Activity extends AppCompatActivity {
     private FirebaseUser user;
     private DatabaseReference reference;
     private String userID;
-    Quiz quiz;
+    //Quiz quiz;
 
     private EditText subject;
     private EditText ansChoice1;
@@ -36,6 +41,7 @@ public class QuizSettings_Activity extends AppCompatActivity {
     private EditText topic;
     private EditText question;
     private EditText timer;
+    private Button cancel;
     private Button submitQuestion;
     private Button createQuiz;
     private String getQuestionsString;
@@ -71,6 +77,18 @@ public class QuizSettings_Activity extends AppCompatActivity {
         generate = findViewById(R.id.createQuiz);
         topic = findViewById(R.id.topic_id);
         timer = findViewById(R.id.timer_id);
+        cancel = findViewById(R.id.cancel_id);
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                questions.clear();
+                Toast.makeText(getApplicationContext(), "Questions are now cleared",
+                        Toast.LENGTH_SHORT).show();
+
+
+            }
+        });
 
         generate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,40 +146,58 @@ public class QuizSettings_Activity extends AppCompatActivity {
                 databaseReference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        quiz = new Quiz(questions, subject.getText().toString(),  topic.getText().toString(), Integer.parseInt(countdown));
-                        databaseReference.setValue(quiz);
-                        Toast.makeText(getApplicationContext(), "quiz added!", Toast.LENGTH_SHORT).show();
+                        Quiz quiz = new Quiz(questions, subject.getText().toString(),  topic.getText().toString(), Integer.parseInt(countdown));
+                        FirebaseDatabase.getInstance().getReference("Quizzes")
+                                .child(FirebaseAuth.getInstance().getCurrentUser().getUid()).push()
+                                .setValue(quiz).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(getApplicationContext(), "quiz added!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getApplicationContext(), "Failed to add quiz", Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+                        //databaseReference.setValue(quiz);
+                        //Toast.makeText(getApplicationContext(), "quiz added!", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(getApplicationContext(), "Database error!", Toast.LENGTH_SHORT).show();
 
                     }
                 });
-
             }
         });
-
-
-
-/*
-        EDIT_TEXT_question_numbers = findViewById(R.id.question_id);
-        generate = findViewById(R.id.createQuiz);
-        generate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getQuestionsString = EDIT_TEXT_question_numbers.getText().toString();
-                getQuestions =  Integer.parseInt(getQuestionsString);
-                System.out.println("Number of questions: " + getQuestions);
-                questions = new ArrayList(getQuestions);
-            }
-        });
-
- */
-
 
     }
 
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.admin_settings, menu);
+        return true;
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch(item.getItemId()){
+            case R.id.quiz_id:
+                Intent quizIntent = new Intent(getApplicationContext(), QuizSettings_Activity.class);
+                startActivity(quizIntent);
+                break;
+            case R.id.assignstudent_id:
+                Intent assignIntent = new Intent(getApplicationContext(), AssignStudent_Activity.class);
+                startActivity(assignIntent);
+                break;
+        }
+        return true;
+    }
 
     public void getCurrentUser(){
         user = FirebaseAuth.getInstance().getCurrentUser();
