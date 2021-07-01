@@ -6,7 +6,7 @@ public class Question {
 
     String question;
     ArrayList<String> answerChoices;
-    int correctAnswer;
+    String correctAnswer;
 
 
 
@@ -14,7 +14,7 @@ public class Question {
 
     }
 
-    public Question(String question, ArrayList<String>answerChoices, int correctAnswer){
+    public Question(String question, ArrayList<String>answerChoices, String correctAnswer){
         this.question = question;
         this.answerChoices = answerChoices;
         this.correctAnswer = correctAnswer;
@@ -59,15 +59,11 @@ public class Question {
         this.answerChoices = answerChoices;
     }
 
-    public int getIndexOfCorrectAnswer() {
+    public String getCorrectAnswer() {
         return correctAnswer;
     }
 
-    public String getStringOfCorrectAnswer(){
-        return this.answerChoices.get(getIndexOfCorrectAnswer());
-    }
-
-    public void setCorrectAnswer(int correctAnswer) {
+    public void setCorrectAnswer(String correctAnswer) {
         this.correctAnswer = correctAnswer;
     }
 }

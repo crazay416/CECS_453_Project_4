@@ -14,4 +14,10 @@
     <string name="quiz_settings">Quiz Settings</string>
     <string name="assign_students">Assign Student</string>
     <string name="reports">Reports</string>
+    <string name="answer_choice_3">choice3</string>
+    <string name="correct_answer">Correct Answer</string>
+    <string name="answer_choice_4">Choice 4</string>
+    <string name="answer_choice_2">Choice2</string>
+    <string name="question">Question</string>
+    <string name="answer_choice_1">Choice1</string>
 </resources>

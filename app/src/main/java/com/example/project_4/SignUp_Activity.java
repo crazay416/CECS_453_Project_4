@@ -14,6 +14,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class SignUp_Activity extends AppCompatActivity {
@@ -25,6 +26,7 @@ public class SignUp_Activity extends AppCompatActivity {
     private boolean check;
 
     private String signup_username, signup_password, signup_password2, signup_email;
+
 
 
     @Override
@@ -39,6 +41,8 @@ public class SignUp_Activity extends AppCompatActivity {
         EDIT_TEXT_signup_password2 = findViewById(R.id.signup_password2);
         EDIT_TEXT_signup_email = findViewById(R.id.signup_email);
         EDIT_TEXT_signup_button = findViewById(R.id.signup_complete);
+
+
 
 
 

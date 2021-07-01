@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListAdapter;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,21 +28,50 @@ public class QuizSettings_Activity extends AppCompatActivity {
     Quiz quiz;
 
     private EditText subject;
+    private EditText ansChoice1;
+    private EditText ansChoice2;
+    private EditText ansChoice3;
+    private EditText ansChoice4;
+    private EditText ansCorrect;
+    private EditText topic;
+    private EditText question;
+    private EditText timer;
+    private Button submitQuestion;
+    private Button createQuiz;
     private String getQuestionsString;
     private int getQuestions;
     Button generate;
-    //ArrayList<>
 
-    ArrayList questions;
+    private ArrayList<Question> questions;
+
+    DatabaseReference databaseReference;
+    FirebaseDatabase firebaseDatabase;
+
+    //ArrayList questions;
     EditText EDIT_TEXT_question_numbers;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_settings);
         getCurrentUser();
+        questions = new ArrayList<>();
+        firebaseDatabase = FirebaseDatabase.getInstance();
+
         subject = findViewById(R.id.subject);
-        generate = findViewById(R.id.submit);
+        ansChoice1 = findViewById(R.id.ansChoice1);
+        ansChoice2 = findViewById(R.id.ansChoice2);
+        ansChoice3 = findViewById(R.id.ansChoice3);
+        ansChoice4 = findViewById(R.id.ansChoice4);
+        ansCorrect = findViewById(R.id.ansCorrect);
+        question = findViewById(R.id.question_id);
+        submitQuestion = findViewById(R.id.submitQuestion);
+        createQuiz = findViewById(R.id.createQuiz);
+        generate = findViewById(R.id.createQuiz);
+        topic = findViewById(R.id.topic_id);
+        timer = findViewById(R.id.timer_id);
+
         generate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,11 +81,72 @@ public class QuizSettings_Activity extends AppCompatActivity {
             }
         });
 
+        submitQuestion.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                ArrayList<String> answerChoices = new ArrayList<>();
+                answerChoices.add(ansChoice1.getText().toString());
+                answerChoices.add(ansChoice2.getText().toString());
+                answerChoices.add(ansChoice3.getText().toString());
+                answerChoices.add(ansChoice4.getText().toString());
+
+                // make sure an answer choice matches the correct answer
+                Boolean match = false;
+                for (int i = 0; i < answerChoices.size(); i++){
+                    if (answerChoices.get(i).compareTo(ansCorrect.getText().toString()) == 0) {
+                        match = true;
+                    }
+                }
+
+                if (match) {
+                    questions.add(new Question(question.getText().toString(), answerChoices
+                            , ansCorrect.getText().toString()));
+
+                    ansChoice1.getText().clear();
+                    ansChoice2.getText().clear();
+                    ansChoice3.getText().clear();
+                    ansChoice4.getText().clear();
+                    ansCorrect.getText().clear();
+                    question.getText().clear();
+
+                    Toast.makeText(getApplicationContext(), "question successfully added to quiz",
+                            Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "an answer choice must match the correct answer",
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        createQuiz.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String countdown = timer.getText().toString();
+                databaseReference = firebaseDatabase.getReference(subject.getText().toString());
+
+                databaseReference.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        quiz = new Quiz(questions, subject.getText().toString(),  topic.getText().toString(), Integer.parseInt(countdown));
+                        databaseReference.setValue(quiz);
+                        Toast.makeText(getApplicationContext(), "quiz added!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+            }
+        });
 
 
 
-        EDIT_TEXT_question_numbers = findViewById(R.id.question_numbers_id);
-        generate = findViewById(R.id.submit);
+/*
+        EDIT_TEXT_question_numbers = findViewById(R.id.question_id);
+        generate = findViewById(R.id.createQuiz);
         generate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,10 +154,10 @@ public class QuizSettings_Activity extends AppCompatActivity {
                 getQuestions =  Integer.parseInt(getQuestionsString);
                 System.out.println("Number of questions: " + getQuestions);
                 questions = new ArrayList(getQuestions);
-               // ListAdapter adapter = SimpleAdapter(QuizSettings_Activity.this, questions,
-                //        R.layout.quiz_question, quiz.questionList)
             }
         });
+
+ */
 
 
     }
