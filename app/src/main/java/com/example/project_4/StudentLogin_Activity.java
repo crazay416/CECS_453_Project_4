@@ -18,6 +18,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Map;
+
 public class StudentLogin_Activity extends AppCompatActivity {
 
 
@@ -58,9 +60,9 @@ public class StudentLogin_Activity extends AppCompatActivity {
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 for (DataSnapshot snapshot2 : snapshot.getChildren()) {
                                     String parent2 = snapshot2.getKey();
-                                    System.out.println("This is parent2: " + parent2);
-
+                                    getTopic((Map<String, Object>) snapshot2.getValue());
                                 }
+
                             }
 
                             @Override
@@ -69,10 +71,7 @@ public class StudentLogin_Activity extends AppCompatActivity {
                             }
                         });
                     }
-                   //System.out.println(parent);
-
                 }
-
             }
 
             @Override
@@ -81,6 +80,14 @@ public class StudentLogin_Activity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void getTopic(Map<String, Object> quizInfo){
+        //Object questionArrayList;
+        for(Map.Entry<String, Object> entry: quizInfo.entrySet()){
+            Map singleUser = (Map) entry.getValue();
+            System.out.println("This is topic: " + singleUser.get("topic"));
+        }
     }
 
 
