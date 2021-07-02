@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,19 +23,68 @@ public class StudentLogin_Activity extends AppCompatActivity {
 
     private FirebaseUser user;
     private DatabaseReference reference;
+    private DatabaseReference reference2;
 
     private String userID;
+
+    private ListView lv;
+
+    TextView email_TEXTVIEW;
+    TextView username_TEXTVIEW;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_login);
+        email_TEXTVIEW = findViewById(R.id.student_email_id);
+        username_TEXTVIEW = findViewById(R.id.student_username_id);
         getCurrentUser();
+        lv = findViewById(R.id.list);
 
+        reference = FirebaseDatabase.getInstance().getReference().child("Users");
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot snapshot1: snapshot.getChildren()){
+                    String parent = snapshot1.getKey();
+                    String children  = snapshot1.getValue().toString();
+                    System.out.println("This is parent: " + parent);
+                    if(children.contains(username_TEXTVIEW.getText().toString())) {
+                        reference2 = FirebaseDatabase.getInstance().getReference().child("Users").child(parent).child("Assigned Quizzes");
+                        reference2.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for (DataSnapshot snapshot2 : snapshot.getChildren()) {
+                                    String parent2 = snapshot2.getKey();
+                                    System.out.println("This is parent2: " + parent2);
 
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+                   //System.out.println(parent);
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
     }
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -58,8 +108,6 @@ public class StudentLogin_Activity extends AppCompatActivity {
         reference = FirebaseDatabase.getInstance().getReference("Users");
         userID = user.getUid();
 
-        final TextView email_TEXTVIEW = findViewById(R.id.student_email_id);
-        final TextView username_TEXTVIEW = findViewById(R.id.student_username_id);
 
         reference.child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
