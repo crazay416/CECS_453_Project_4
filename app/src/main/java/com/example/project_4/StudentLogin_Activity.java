@@ -3,10 +3,18 @@ package com.example.project_4;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class StudentLogin_Activity extends AppCompatActivity {
@@ -27,12 +36,15 @@ public class StudentLogin_Activity extends AppCompatActivity {
     private DatabaseReference reference;
     private DatabaseReference reference2;
 
+    Spinner choose_quiz;
+
     private String userID;
 
-    private ListView lv;
 
     TextView email_TEXTVIEW;
     TextView username_TEXTVIEW;
+    TextView topic_selected;
+    Button select_quiz;
 
 
 
@@ -42,8 +54,10 @@ public class StudentLogin_Activity extends AppCompatActivity {
         setContentView(R.layout.activity_student_login);
         email_TEXTVIEW = findViewById(R.id.student_email_id);
         username_TEXTVIEW = findViewById(R.id.student_username_id);
+        choose_quiz = findViewById(R.id.choose_quiz_id);
+        topic_selected = findViewById(R.id.topic_selected_id);
+        select_quiz = findViewById(R.id.take_quiz_id);
         getCurrentUser();
-        lv = findViewById(R.id.list);
 
         reference = FirebaseDatabase.getInstance().getReference().child("Users");
         reference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -80,14 +94,46 @@ public class StudentLogin_Activity extends AppCompatActivity {
             }
         });
 
+        select_quiz.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "You will be taking: " +
+                        topic_selected.getText().toString(), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(getApplicationContext(), Activity_Student_Quiz.class);
+                intent.putExtra("topic_data", topic_selected.getText().toString());
+                startActivity(intent);
+
+
+            }
+        });
+
     }
 
     public void getTopic(Map<String, Object> quizInfo){
         //Object questionArrayList;
+        ArrayList<String> allTopics = new ArrayList<>();
         for(Map.Entry<String, Object> entry: quizInfo.entrySet()){
             Map singleUser = (Map) entry.getValue();
-            System.out.println("This is topic: " + singleUser.get("topic"));
+            allTopics.add(singleUser.get("topic").toString());
+            //System.out.println("This is topic: " + singleUser.get("topic"));
         }
+
+        ArrayAdapter<String> aa = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_dropdown_item, allTopics);
+        choose_quiz.setAdapter(aa);
+        choose_quiz.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String currentTopic = allTopics.get(position);
+                topic_selected.setText(currentTopic);
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
     }
 
 

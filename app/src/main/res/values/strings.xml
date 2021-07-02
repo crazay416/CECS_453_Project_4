@@ -20,4 +20,10 @@
     <string name="answer_choice_2">Choice2</string>
     <string name="question">Question</string>
     <string name="answer_choice_1">Choice1</string>
+    <string name="title_activity__student__quiz">Activity_Student_Quiz</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
 </resources>
