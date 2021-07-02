@@ -101,6 +101,7 @@ public class StudentLogin_Activity extends AppCompatActivity {
                         topic_selected.getText().toString(), Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(getApplicationContext(), Activity_Student_Quiz.class);
                 intent.putExtra("topic_data", topic_selected.getText().toString());
+                intent.putExtra("username", username_TEXTVIEW.getText().toString());
                 startActivity(intent);
 
 
