@@ -50,7 +50,6 @@ public class Activity_Student_Quiz extends AppCompatActivity {
     private CountDownTimer cdt;
     private String allQuizzes;
     private String eachQuiz;
-    private String completed;
 
 
     @Override
